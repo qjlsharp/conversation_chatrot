@@ -73,8 +73,12 @@
 						</div>
 					</div>
 				</div>
-				<input type="text" id="input-text" placeholder="Type a response and hit enter" value="" autocomplete="off" class="chat-window--message-input base--text-input">
-				<div align="center"><input type="button" value="Click to talk" onclick="speechToText()" class="base--button" ></div>
+				<!--<input type="text" id="input-text" placeholder="Type a response and hit enter" value="" autocomplete="off" class="chat-window&#45;&#45;message-input base&#45;&#45;text-input">-->
+				<!--<div align="center"><input type="button" value="Click to talk" onclick="speechToText()" class="base&#45;&#45;button" ></div>-->
+				<div class="ui-inputs">
+					<input type="text" id="input-text" placeholder="Type a response and hit enter" value="" autocomplete="off" class="chat-window--message-input base--text-input">
+					<input value="Speak" class="base--button ui-button-microphone" type="button" onclick="speechToText()">
+				</div>
 			</div>
 		</div>
 		<!-- Property template -->
