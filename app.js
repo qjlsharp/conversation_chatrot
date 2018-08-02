@@ -12,17 +12,25 @@ var querystring = require('querystring');
 var watson = require('watson-developer-cloud');
 
 var conversation = watson.conversation({
-username: '339a3675-d104-4a05-85eb-d904c5ea435b', // replace with username from service key
-password: 'LWURiQPWFQQA',
-path: { workspace_id: '84948310-3f00-4e3b-a0b3-78260ff6168c' },
+//EN
+// username: '339a3675-d104-4a05-85eb-d904c5ea435b', // replace with username from service key
+// password: 'LWURiQPWFQQA',
+// path: { workspace_id: '84948310-3f00-4e3b-a0b3-78260ff6168c' },
+
+//JP
+username: "79cd0712-482b-4fb3-8ea3-0710eada5e99",
+password: "g3Ntt7PHu4Ze",
+path: { workspace_id: '0734c777-95ed-4200-ae42-869614ec34a1' },
 version: 'v1',
 version_date: '2017-04-21'
 });
 
 
 var authorization1 = new watson.AuthorizationV1({
+	//EN
     username: "27d0e5e4-5399-42be-b706-c0172c1afe6a",
-    password: "85ve32lfOOak"
+	password: "85ve32lfOOak"
+	
 });
 
 var app = express();
@@ -99,7 +107,10 @@ app.post('/mainflow', function(req, res, next) {
 	var client_input = req.body.input;
 	
 	conversation.message({
-		  workspace_id: '84948310-3f00-4e3b-a0b3-78260ff6168c',
+		 // EN 
+		 // workspace_id: '84948310-3f00-4e3b-a0b3-78260ff6168c',
+		 //JP
+		 workspace_id: '0734c777-95ed-4200-ae42-869614ec34a1',
 		  input: { text: client_input },
 		  context: context
 		 }, function(err, response) {
@@ -111,7 +122,10 @@ app.post('/mainflow', function(req, res, next) {
 		       context = response.context;//多轮对话需要将res的context赋给请求context
 		   	if( null == req.body.input)
 			{
-				res.json('Hello, I am Watson, How can I help you? (Get more about us in <a href=\'#\' onclick=\'window.open("http://www.ibm.com/watson"); return;\'> IBM Watson</a>")');
+				// EN
+				// res.json('Hello, I am Watson, How can I help you? (Get more about us in <a href=\'#\' onclick=\'window.open("http://www.ibm.com/watson"); return;\'> IBM Watson</a>)');
+				// JP
+				res.json('こんにちは、私はWatsonですが、お手伝いできますか。? (私たちについてもっと <a href=\'#\' onclick=\'window.open("http://www.ibm.com/watson"); return;\'> IBM Watson</a>)');
 			}
 		   	else
 		   	{

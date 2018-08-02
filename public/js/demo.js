@@ -79,7 +79,8 @@ $.get('/speech-to-text/token')
           inactivity_timeout: 3,              // Number of seconds to wait before closing input stream
           format: true,                       // Inhibits errors
           keepMicrophone: true,               // Avoids repeated permissions prompts in FireFox
-            model: "en-US_BroadbandModel"
+            // model: "en-US_BroadbandModel"
+            model: "ja-JP_BroadbandModel"
         }); 
 })
 .fail(function(error){
