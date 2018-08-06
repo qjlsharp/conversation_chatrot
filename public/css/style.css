@@ -1035,6 +1035,7 @@ pre[class*=" language-"] {
   width: 100%;
   clear: right;
   float: right;
+  margin-left: 90px;
   margin-top: 10px;
   margin-right: 0; }
   @media (min-width: 500px) {
@@ -1051,7 +1052,7 @@ pre[class*=" language-"] {
 
 @media (min-width: 700px) {
   .banner--service-info {
-    width: 83.33333%;
+    /*width: 83.33333%;*/
     height: 20px;
     clear: right;
     float: left;
@@ -1283,7 +1284,7 @@ pre[class*=" language-"] {
 
 @media (min-width: 1200px) {
   ._demo--container--new {
-    width: 85%;
+    width: 100%;
     margin: 0rem auto;
     /*  background-color: #004E71;*/
     background-color: #548091;
