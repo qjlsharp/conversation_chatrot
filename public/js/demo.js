@@ -86,7 +86,7 @@ var sttCommon = function (mode) {
         outputElement: document.getElementById('input-text'),       // CSS selector or DOM Element
         inactivity_timeout: 3,              // Number of seconds to wait before closing input stream
         format: true,                       // Inhibits errors
-        keepMicrophone: true,               // Avoids repeated permissions prompts in FireFox
+        keepMicrophone: false,               // Avoids repeated permissions prompts in FireFox
         model: mode
       });
     })
