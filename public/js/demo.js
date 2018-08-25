@@ -67,6 +67,7 @@ $chatInput.keydown(function (event) {
   }
 });
 
+//语言模式设定
 var speechToText = function () {
   var conMode = $('#conMode').val();
   if (conMode == '1') {
@@ -261,11 +262,37 @@ function replaceAutolearnItemsByButtons(text) {
     });
 
   });
-
   output = output.replace(/<mct:autolearnitems>/g, "");
   output = output.replace(/<\/mct:autolearnitems>/g, "");
-
   return output;
+}
+
+//取得TTS的token
+function getTtsToken() {
+  return fetch('/api/text-to-speech/token')
+    .then(function (response) {
+      return response.text();
+    });
+}
+
+//取得watson答案文字并转换语音
+//TTS功能实现
+var getWatsonMessageAndConvertToAudio = function (obj) {
+  var conMode = $('#conMode').val();
+  var languageKB;
+  if (conMode == '1') {
+    languageKB = 'ja-JP_EmiVoice'
+  } else {
+    languageKB = 'en-US_AllisonVoice'
+  }
+
+  getTtsToken().then(function (token) {
+    WatsonSpeech.TextToSpeech.synthesize({
+      text: $(obj).text(),
+      voice: languageKB,
+      token: token
+    });
+  });
 }
 
 var postProcessOutput = function (text) {
