@@ -10,6 +10,11 @@ var http = require('http');
 var path = require('path');
 var querystring = require('querystring');
 var watson = require('watson-developer-cloud');
+const AuthorizationV1 = require('watson-developer-cloud/authorization/v1');
+var TextToSpeechV1 = require('watson-developer-cloud/text-to-speech/v1');
+const vcapServices = require('vcap_services');
+var fs = require('fs');
+var path = require("path");
 var conversation;
 var conMode = '1';
 conversation = watson.conversation({
@@ -25,6 +30,11 @@ var authorization1 = new watson.AuthorizationV1({
 	//EN
 	username: "27d0e5e4-5399-42be-b706-c0172c1afe6a",
 	password: "85ve32lfOOak"
+});
+
+var textToSpeech = new TextToSpeechV1({
+	username: '022baded-9eeb-4fcf-af7d-514e997f2746',
+	password: 'Ob0s40UsOJ5y'
 });
 
 var app = express();
@@ -115,7 +125,7 @@ app.post('/mainflow', function (req, res, next) {
 		console.log("params:" + JSON.stringify(params, null, 4));
 	}
 	var client_input = req.body.input;
-
+	//jp模式
 	if (conMode == '1') {
 		conversation.message({
 			// EN 
@@ -142,6 +152,7 @@ app.post('/mainflow', function (req, res, next) {
 				}
 			}
 		});
+		//EN模式
 	} else {
 		conversation.message({
 			// EN 
@@ -183,6 +194,88 @@ app.get('/speech-to-text/token', function (req, res, next) {
 		}
 	});
 })
+
+// deleteFolderRecursive = function (url) {
+// 	var files = [];
+// 	//判断给定的路径是否存在
+// 	if (fs.existsSync(url)) {
+// 		//返回文件和子目录的数组
+// 		files = fs.readdirSync(url);
+// 		files.forEach(function (file, index) {
+// 			// var curPath = url + "/" + file;
+// 			var curPath = path.join(url, file);
+// 			//fs.statSync同步读取文件夹文件，如果是文件夹，在重复触发函数
+// 			if (fs.statSync(curPath).isDirectory()) { // recursee
+// 				deleteFolderRecursive(curPath);
+// 				// 是文件delete file
+// 			} else {
+// 				fs.unlinkSync(curPath);
+// 			}
+// 		});
+// 		//清除文件夹
+// 		//   fs.rmdirSync(url);
+// 	} else {
+// 		console.log("给定的路径不存在，请给出正确的路径");
+// 	}
+// };
+
+// var synthesizeParams;
+// //tts功能实现
+// app.get('/text-to-speech', function (req, res, next) {
+// 	deleteFolderRecursive('.\\voice');
+
+// 	var ttsText = req.query.ttsText;
+// 	var conMode = req.query.model;
+// 	console.log('-----------' + conMode + '--------------------');
+// 	if (conMode == '1') {
+// 		synthesizeParams = {
+// 			text: ttsText,
+// 			accept: 'audio/wav',
+// 			voice: 'ja-JP_EmiVoice'
+// 		};
+// 		console.log('-----------日文模式--------------------');
+// 	} else {
+// 		synthesizeParams = {
+// 			text: ttsText,
+// 			accept: 'audio/wav',
+// 			voice: 'en-US_AllisonVoice'
+// 		};
+// 		console.log('-----------英文模式--------------------');
+// 	}
+
+// 	console.log('-----------text-to-speech--------------------');
+// 	// Pipe the synthesized text to a file.
+// 	textToSpeech.synthesize(synthesizeParams).on('error', function (error) {
+// 		console.log(error);
+// 	}).pipe(fs.createWriteStream('.\\voice\\voice.wav'));
+// })
+
+//TTS功能的api用户名和密码
+var ttsAuthService = new AuthorizationV1(
+	Object.assign(
+	  {
+		username: '022baded-9eeb-4fcf-af7d-514e997f2746', // or hard-code credentials here
+		password: 'Ob0s40UsOJ5y'
+	  },
+	  vcapServices.getCredentials('text_to_speech') // pulls credentials from environment in bluemix, otherwise returns {}
+	)
+  );
+//取得TTS的token
+  app.use('/api/text-to-speech/token', function(req, res) {
+	ttsAuthService.getToken(
+	  {
+		url: TextToSpeechV1.URL
+	  },
+	  function(err, token) {
+		if (err) {
+		  console.log('Error retrieving token: ', err);
+		  res.status(500).send('Error retrieving token');
+		  return;
+		}
+		res.send(token);
+	  }
+	);
+  });
 
 http.createServer(app).listen(app.get('port'), function () {
 	console.log('Express server listening on port ' + app.get('port'));
