@@ -1,23 +1,5 @@
-/**
- * Copyright 2015 IBM Corp. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/* global $:true */
 
 'use strict';
-
 // conversation variables
 var conversation_id, client_id;
 console.log('123');
@@ -74,6 +56,7 @@ var speechToText = function () {
     sttCommon('ja-JP_BroadbandModel');
   } else {
     sttCommon('en-US_BroadbandModel');
+    // sttCommon('zh-CN_BroadbandModel');
   }
 }
 //stt api 共通
@@ -103,8 +86,8 @@ var sttCommon = function (mode) {
 
 
 //选择语言模式
-var getCommMode = function () {
-  $.get('/getCommMode?model=' + $('#conMode').val())
+var getCommMode = function (mode) {
+  $.get('/getCommMode?model=' + mode)
     .done(function onSuccess() {
 
     });
@@ -112,11 +95,11 @@ var getCommMode = function () {
 
 var getCommKbn = function (usertXt) {
   if (usertXt == '2') {
-    talk('WATSON', 'You have switched to english conversation mode'); // show
     $('#conMode').val('2');
+    talk('WATSON', 'You have switched to english conversation mode'); // show
   } else {
-    talk('WATSON', '日本語チャットモードに切り替えました。'); // show
     $('#conMode').val('1');
+    talk('WATSON', '日本語チャットモードに切り替えました。'); // show
   }
   scrollChatToBottom();
 }
@@ -288,7 +271,7 @@ var getWatsonMessageAndConvertToAudio = function (obj) {
 
   getTtsToken().then(function (token) {
     WatsonSpeech.TextToSpeech.synthesize({
-      text: $(obj).text(),
+      text: obj,
       voice: languageKB,
       token: token
     });
@@ -320,7 +303,11 @@ var talk = function (origin, text) {
     inputHistory.push(text);
     inputHistoryPointer = inputHistory.length;
   });
-
+  //Watsonの回答に、ＴＴＳで出力する
+  if(origin == "WATSON"){
+    // getCommMode($('#conMode').val());
+    getWatsonMessageAndConvertToAudio(text);
+  }
 };
 
 var addProperty = function ($parent, name, value) {

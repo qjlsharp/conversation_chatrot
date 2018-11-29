@@ -1,45 +1,50 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>EA-Microsoft - Badminton Sports Chatbot</title>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta property="og:image" content="conversation.svg" />
-<meta property="og:title" content="Watson Conversation Chat" />
-<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-<link rel="stylesheet" href="css/style.css">
+	<title>EA-Microsoft - Badminton Sports Chatbot</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:image" content="conversation.svg" />
+	<meta property="og:title" content="Watson Conversation Chat" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="css/style.css">
 </head>
+
 <body style="background: -moz-linear-gradient(top, #EAEAEA, #D8D8D8);">
-<header class="_demo--heading">
-</header>
-<div class="_demo--container--new" style="width:100%;">
-	<div class="_demo--container--new">
-		<div class="banner--service-icon-container">
-			<img class="banner--service-icon" src="images/icons/EA-Cognitive-logo.png" style="width:100%;" alt="Watson Icon">
-		</div>
-		<div class="banner--service-info">
-			<h3 class="base--h3">Badminton Sports Chatbot - Powered by Watson</h3>
-			<div class="base--h5" style="color: #FFFFFF">Work hard for Business，work smart with Happiness，get more fun from Badminton!</div>
-			<div class="banner--service-description" style="color: #FFFFFF"></div>
-		</div>
-		<!--<div id="banner&#45;&#45;foot" class="banner&#45;&#45;service-icon-footer">-->
+	<header class="_demo--heading">
+	</header>
+	<div class="_demo--container--new" style="width:100%;">
+		<div class="_demo--container--new">
+			<div class="banner--service-icon-container">
+				<img class="banner--service-icon" src="images/icons/EA-Cognitive-logo.png" style="width:100%;" alt="Watson Icon">
+			</div>
+			<div class="banner--service-info">
+				<h3 class="base--h3">Badminton Sports Chatbot - Powered by Watson</h3>
+				<div class="base--h5" style="color: #FFFFFF">Work hard for Business，work smart with Happiness，get more fun from
+					Badminton!</div>
+				<div class="banner--service-description" style="color: #FFFFFF"></div>
+			</div>
+			<!--<div id="banner&#45;&#45;foot" class="banner&#45;&#45;service-icon-footer">-->
 			<!--<img class="banner&#45;&#45;service-icon" src="images/icons/ibmlogo.png" alt="Watson Icon">-->
-		<!--</div>-->
+			<!--</div>-->
+		</div>
 	</div>
-</div>	
 	<div class="_demo--container">
 		<div>
 			<input type="hidden" value="dummy" style="display: none;">
-			<input type="hidden" name="leavemgmt" value="ABSENCE MANAGEMENT" class="_external--button--green" onclick="clicked('leave application')"/> &nbsp;
-			<input type="hidden" value="BRING YOUR OWN DEVICE" class="_external--button--green" onclick="clicked('bring your device')"> &nbsp;
+			<input type="hidden" name="leavemgmt" value="ABSENCE MANAGEMENT" class="_external--button--green" onclick="clicked('leave application')" />
+			&nbsp;
+			<input type="hidden" value="BRING YOUR OWN DEVICE" class="_external--button--green" onclick="clicked('bring your device')">
+			&nbsp;
 			<input type="hidden" value="CAREER ADVISOR" class="_external--button--blue"> &nbsp;
 			<input type="hidden" value="WORKFORCE PREDICTION" class="_external--button--blue"> &nbsp;
 			<input type="hidden" value="DEMOGRAPHICS @WORKPLACE" class="_external--button--blue"> &nbsp;
 			<input type="hidden" value="RECRUITMENT ASSISTANCE" class="_external--button--blue">
 		</div>
 		<p style="color: #004E71; font-weight: 800; font-size: 18px">Speak to our Watson Badminton Sports Chatbot</p>
-		<div class="data--info_confidence"></div> 
+		<div class="data--info_confidence"></div>
 		<div class="_content--dialog" style="width: 100%">
 			<div class="chat-window">
 				<div class="chat-box">
@@ -51,7 +56,7 @@
 								</div>
 								<div class="chat-box--message">
 									<div class="chat-box--message-vertical">
-										<p class="chat-box--message-text base--p" onclick="getWatsonMessageAndConvertToAudio(this)"></p>
+										<p class="chat-box--message-text base--p"></p>
 									</div>
 								</div>
 							</div>
@@ -60,7 +65,7 @@
 							<div class="chat-box--container">
 								<div class="chat-box--message">
 									<div class="chat-box--message-vertical">
-										<p class="chat-box--message-text base--p" onclick="getWatsonMessageAndConvertToAudio(this)"></p>
+										<p class="chat-box--message-text base--p"></p>
 									</div>
 								</div>
 								<div class="img-container chat-box--avatar chat-box--avatar_YOU">
@@ -89,9 +94,10 @@
 			<span class="data--variable-title"></span>
 			<span class="data--variable-value"></span>
 		</div>
-</div>
+	</div>
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/watson-speech.min.js"></script>
-  	<script type="text/javascript" src="js/demo.js"></script>
+	<script type="text/javascript" src="js/demo.js"></script>
 </body>
+
 </html>

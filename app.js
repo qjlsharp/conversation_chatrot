@@ -2,7 +2,6 @@
 /**
  * Module dependencies.
  */
-
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
@@ -17,6 +16,7 @@ var fs = require('fs');
 var path = require("path");
 var conversation;
 var conMode = '1';
+var mailOption = require('./routes/mail.js');
 conversation = watson.conversation({
 	//JP
 	username: "79cd0712-482b-4fb3-8ea3-0710eada5e99",
@@ -101,11 +101,12 @@ app.get('/getCommMode', function (req, res, next) {
 			version: 'v1',
 			version_date: '2017-04-21'
 		});
-		return res.send('this is my commMode');
+		// return res.send('this is my commMode');
 	}
 })
 
 var context = null;
+//文字聊天功能实现
 app.post('/mainflow', function (req, res, next) {
 	console.log('$$$$$$$$$$$$$$$$$$ In mainflow:');
 
@@ -142,13 +143,15 @@ app.post('/mainflow', function (req, res, next) {
 				console.log(JSON.stringify(response, null, 2));
 				context = response.context;//多轮对话需要将res的context赋给请求context
 				if (null == req.body.input) {
-					// EN
-					// res.json('Hello, I am Watson, How can I help you? (Get more about us in <a href=\'#\' onclick=\'window.open("http://www.ibm.com/watson"); return;\'> IBM Watson</a>)');
 					// JP
-					res.json('こんにちは、私はWatsonですが、お手伝いできますか。? (チャット言語 <a href=\'#2\' onclick=getCommKbn(\'1\');getCommMode(\'1\')> Japanese</a> Or <a href=\'#2\' onclick=getCommKbn(\'2\');getCommMode(\'2\')> English</a>)');
+					res.json('こんにちは、私はWatsonですが、お手伝いできますか? (チャット言語 <a href=\'#1\' onclick=getCommKbn(\'1\');getCommMode(\'1\')> 日本語</a> Or <a href=\'#2\' onclick=getCommKbn(\'2\');getCommMode(\'2\')> English</a>)');
 				}
 				else {
 					res.json(response.output.text[0]);
+					//没有合适答案，发送邮件请求回答
+					if ("分かりませんでした。あなたは他の話し方を試すことができます。" == response.output.text[0]) {
+						mailOption.send("知識が足りないので、答えをお願いします。", "エンドユーザの問題：" + client_input);
+					}
 				}
 			}
 		});
@@ -169,19 +172,23 @@ app.post('/mainflow', function (req, res, next) {
 				console.log(JSON.stringify(response, null, 2));
 				context = response.context;//多轮对话需要将res的context赋给请求context
 				if (null == req.body.input) {
-					// EN
-					// res.json('Hello, I am Watson, How can I help you? (Get more about us in <a href=\'#\' onclick=\'window.open("http://www.ibm.com/watson"); return;\'> IBM Watson</a>)');
 					// JP
-					res.json('こんにちは、私はWatsonですが、お手伝いできますか。? (チャット言語 <a href=\'#2\' onclick=getCommKbn(\'1\');getCommMode(\'1\')> Japanese</a> Or <a href=\'#2\' onclick=getCommKbn(\'2\');getCommMode(\'2\')> English</a>)');
+					res.json('こんにちは、私はWatsonですが、お手伝いできますか? (チャット言語 <a href=\'#2\' onclick=getCommKbn(\'1\');getCommMode(\'1\')> 日本語</a> Or <a href=\'#2\' onclick=getCommKbn(\'2\');getCommMode(\'2\')> English</a>)');
+					// res.json('您好，我是Watson，有什么可以帮助您的? (聊天语言 <a href=\'#2\' onclick=getCommKbn(\'1\');getCommMode(\'1\')> Japanese</a> Or <a href=\'#2\' onclick=getCommKbn(\'2\');getCommMode(\'2\')> 中文</a>)');
 				}
 				else {
 					res.json(response.output.text[0]);
+					//没有合适答案，发送邮件请求回答
+					if ("I didn't understand. You can try rephrasing." == response.output.text[0]) {
+						mailOption.send("If there is insufficient knowledge, please add the answer.", "End user's question: " + client_input);
+					}
 				}
 			}
 		});
 	}
 });
 
+//STT功能取得token
 app.get('/speech-to-text/token', function (req, res, next) {
 	console.log('-----------speech to text to get token--------------------');
 	authorization1.getToken({
@@ -195,87 +202,33 @@ app.get('/speech-to-text/token', function (req, res, next) {
 	});
 })
 
-// deleteFolderRecursive = function (url) {
-// 	var files = [];
-// 	//判断给定的路径是否存在
-// 	if (fs.existsSync(url)) {
-// 		//返回文件和子目录的数组
-// 		files = fs.readdirSync(url);
-// 		files.forEach(function (file, index) {
-// 			// var curPath = url + "/" + file;
-// 			var curPath = path.join(url, file);
-// 			//fs.statSync同步读取文件夹文件，如果是文件夹，在重复触发函数
-// 			if (fs.statSync(curPath).isDirectory()) { // recursee
-// 				deleteFolderRecursive(curPath);
-// 				// 是文件delete file
-// 			} else {
-// 				fs.unlinkSync(curPath);
-// 			}
-// 		});
-// 		//清除文件夹
-// 		//   fs.rmdirSync(url);
-// 	} else {
-// 		console.log("给定的路径不存在，请给出正确的路径");
-// 	}
-// };
-
-// var synthesizeParams;
-// //tts功能实现
-// app.get('/text-to-speech', function (req, res, next) {
-// 	deleteFolderRecursive('.\\voice');
-
-// 	var ttsText = req.query.ttsText;
-// 	var conMode = req.query.model;
-// 	console.log('-----------' + conMode + '--------------------');
-// 	if (conMode == '1') {
-// 		synthesizeParams = {
-// 			text: ttsText,
-// 			accept: 'audio/wav',
-// 			voice: 'ja-JP_EmiVoice'
-// 		};
-// 		console.log('-----------日文模式--------------------');
-// 	} else {
-// 		synthesizeParams = {
-// 			text: ttsText,
-// 			accept: 'audio/wav',
-// 			voice: 'en-US_AllisonVoice'
-// 		};
-// 		console.log('-----------英文模式--------------------');
-// 	}
-
-// 	console.log('-----------text-to-speech--------------------');
-// 	// Pipe the synthesized text to a file.
-// 	textToSpeech.synthesize(synthesizeParams).on('error', function (error) {
-// 		console.log(error);
-// 	}).pipe(fs.createWriteStream('.\\voice\\voice.wav'));
-// })
-
 //TTS功能的api用户名和密码
 var ttsAuthService = new AuthorizationV1(
 	Object.assign(
-	  {
-		username: '022baded-9eeb-4fcf-af7d-514e997f2746', // or hard-code credentials here
-		password: 'Ob0s40UsOJ5y'
-	  },
-	  vcapServices.getCredentials('text_to_speech') // pulls credentials from environment in bluemix, otherwise returns {}
+		{
+			username: '022baded-9eeb-4fcf-af7d-514e997f2746', // or hard-code credentials here
+			password: 'Ob0s40UsOJ5y'
+		},
+		vcapServices.getCredentials('text_to_speech') // pulls credentials from environment in bluemix, otherwise returns {}
 	)
-  );
+);
+
 //取得TTS的token
-  app.use('/api/text-to-speech/token', function(req, res) {
+app.use('/api/text-to-speech/token', function (req, res) {
 	ttsAuthService.getToken(
-	  {
-		url: TextToSpeechV1.URL
-	  },
-	  function(err, token) {
-		if (err) {
-		  console.log('Error retrieving token: ', err);
-		  res.status(500).send('Error retrieving token');
-		  return;
+		{
+			url: TextToSpeechV1.URL
+		},
+		function (err, token) {
+			if (err) {
+				console.log('Error retrieving token: ', err);
+				res.status(500).send('Error retrieving token');
+				return;
+			}
+			res.send(token);
 		}
-		res.send(token);
-	  }
 	);
-  });
+});
 
 http.createServer(app).listen(app.get('port'), function () {
 	console.log('Express server listening on port ' + app.get('port'));
